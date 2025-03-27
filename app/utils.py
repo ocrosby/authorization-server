@@ -4,11 +4,15 @@ This module contains utility functions for the application
 
 from datetime import datetime, timedelta, UTC
 from typing import Optional
+
+from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
 from app.models.user import DBUser
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
@@ -29,7 +33,12 @@ def get_password_hash(password: str) -> str:
     """
     return pwd_context.hash(password)
 
-def create_access_token(data: dict, secret_key: str, algorithm: str, expires_delta: timedelta = None):
+def create_access_token(
+    data: dict,
+    secret_key: str,
+    algorithm: str,
+    expires_delta: timedelta = None
+) -> str:
     """
     This function creates an access token
 

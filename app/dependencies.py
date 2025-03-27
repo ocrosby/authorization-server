@@ -8,7 +8,8 @@ from app.models.token import TokenData
 from app.models.user import DBUser
 from app.utils import get_user
 from app.database import db
-from app.main import oauth2_scheme, SECRET_KEY, ALGORITHM
+from app.main import oauth2_scheme
+from app.conf import SECRET_KEY, ALGORITHM
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     """
