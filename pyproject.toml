@@ -7,10 +7,12 @@ authors = [
 ]
 dependencies = [
     "fastapi",
+    "httpx",
     "passlib[bcrypt]",
     "python-jose[cryptography]",
     "python-multipart",
     "requests",
+    "sqlmodel",
     "uvicorn[standard]",
 ]
 

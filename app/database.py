@@ -1,4 +1,11 @@
-from app.models.user import DBUser
+"""
+This module contains the database configuration
+"""
+
+from sqlmodel import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+
+from app.conf import DATABASE_URL
 
 HPW = "$2b$12$MsIdruNFD1BNSED.xG7K1OZTMyg7jNqqGE1T6BxDQwkIv3KhkSGLO"
 db = {
@@ -10,3 +17,6 @@ db = {
         "disabled": False
     }
 }
+
+engine = create_engine(DATABASE_URL, echo=True)
+Base = declarative_base()

@@ -4,11 +4,13 @@ This file contains the dependencies for the FastAPI application.
 
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
+from sqlmodel import Session
+from app.database import engine
 from app.models.token import TokenData
 from app.models.user import DBUser
 from app.utils import get_user
 from app.database import db
-from app.main import oauth2_scheme
+from app.utils import oauth2_scheme
 from app.conf import SECRET_KEY, ALGORITHM
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -53,3 +55,13 @@ async def get_current_active_user(current_user: DBUser = Depends(get_current_use
         raise HTTPException(status_code=400, detail="Inactive user")
 
     return current_user
+
+
+def get_session():
+    """
+    This function gets the session
+
+    :return:
+    """
+    with Session(engine) as session:
+        yield session
