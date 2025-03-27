@@ -16,7 +16,7 @@ This project is an OAuth2 authorization server built with FastAPI. It includes f
 
 2. Create and activate a virtual environment:
     ```sh
-    python -m venv .venv
+    python3.13 -m venv .venv
     source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
     ```
 
