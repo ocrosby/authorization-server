@@ -1,0 +1,27 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "A simple OAuth2 authorization server."
+authors = [
+    { name="Omar Crosby", email="omar.crosby@gmail.com" }
+]
+dependencies = [
+    "fastapi",
+    "passlib[bcrypt]",
+    "python-jose[cryptography]",
+    "python-multipart",
+    "requests",
+    "uvicorn[standard]",
+]
+
+[build-system]
+requires = ["flit_core>=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project.optional-dependencies]
+dev = [
+    "black>=25.1.0",
+    "pytest>=6.2.5",
+    "pytest-mock>=3.14.0",
+    "requests-mock>=1.12.1"
+]
