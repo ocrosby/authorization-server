@@ -22,7 +22,9 @@ This project is an OAuth2 authorization server built with FastAPI. It includes f
 
 3. Install the dependencies:
     ```sh
-    pip install -r requirements.txt
+    pip install --upgrade pip
+    pip install invoke flit
+    pip install -e ".[dev]"
     ```
 
 ## Configuration
@@ -43,9 +45,9 @@ This project is an OAuth2 authorization server built with FastAPI. It includes f
     uvicorn app.main:app --reload
     ```
 
-2. Use the `hash-password` CLI command to hash a password:
+2. Use the `hashpwd` CLI command to hash a password:
     ```sh
-    hash-password your_password
+    hashpwd your_password
     ```
 
 ## Testing

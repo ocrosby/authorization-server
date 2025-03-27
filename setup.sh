@@ -23,4 +23,4 @@ pip install --upgrade pip
 
 # Install the required packages
 pip install invoke flit
-pip install -e "[.dev]"
+pip install -e ".[dev]"
