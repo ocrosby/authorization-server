@@ -1,21 +1,19 @@
 """
 This module contains the User model
 """
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
-from pydantic import BaseModel
 
-class User(BaseModel):
+class DBUser(SQLModel, table=True):
     """
-    This is the User model
+    The database model for the User
     """
-    username: str
-    email: str or None = None
-    full_name: str or None = None
-    disabled: bool or None = None
+    __tablename__ = 'users'
 
-class DBUser(User):
-    """
-    This is the DBUser model
-    """
-    hashed_password: str
-    
+    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
+    username: str = Field(index=True, unique=True, nullable=False)
+    email: Optional[str] = Field(index=True, unique=True, nullable=False)
+    full_name: Optional[str] = Field(default=None)
+    disabled: Optional[bool] = Field(default=False, nullable=False)
+    hashed_password: str = Field(nullable=False)
