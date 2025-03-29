@@ -2,10 +2,10 @@
 This module contains the Client model
 """
 from typing import Optional, List
-
+from sqlalchemy import Column, ARRAY, String
 from sqlmodel import Field, SQLModel
 
-class Client(SQLModel, table=True):
+class DBClient(SQLModel, table=True):
     """
     OAuth2 Client model
 
@@ -30,13 +30,13 @@ class Client(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     client_id: str
     client_secret: str
-    redirect_uris: List[str]
-    grant_types: List[str]
-    response_types: List[str]
-    client_name: str
+    redirect_uris: Optional[List[str]] = Field(sa_column=Column(ARRAY(String)))
+    grant_types: Optional[List[str]] = Field(sa_column=Column(ARRAY(String)))
+    response_types: Optional[List[str]] = Field(sa_column=Column(ARRAY(String)))
+    client_name: Optional[str] = None
     client_uri: Optional[str] = None
     logo_uri: Optional[str] = None
-    scope: list[str]
-    contacts: Optional[List[str]] = None
+    scope: Optional[List[str]] = Field(sa_column=Column(ARRAY(String)))
+    contacts: Optional[List[str]] = Field(sa_column=Column(ARRAY(String)), default=None)
     tos_uri: Optional[str] = None
     policy_uri: Optional[str] = None

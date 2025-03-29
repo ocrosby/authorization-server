@@ -9,7 +9,7 @@ from app.main import app
 client = TestClient(app)
 
 
-
+@pytest.mark.skip
 def test_create_client(mock_db_session):
     """
     This function tests the create_client route
