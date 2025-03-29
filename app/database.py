@@ -14,7 +14,7 @@ db = {
         "full_name": "Timothy McTimmerson",
         "email": "tim@gmail.com",
         "hashed_password": HPW,
-        "disabled": False
+        "disabled": False,
     }
 }
 

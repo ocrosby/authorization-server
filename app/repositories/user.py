@@ -8,12 +8,14 @@ from sqlmodel import Session, select
 from sqlalchemy.engine import Engine
 
 from app.models.user import DBUser
-from app.schemas.user import User
+from app.schemas.user import UserCreate, UserUpdate
+
 
 class UserRepository:
     """
     This class contains the methods for the user repository
     """
+
     def __init__(self, engine: Engine):
         self.engine = engine
 
@@ -64,8 +66,7 @@ class UserRepository:
             users = session.exec(select(DBUser)).all()
             return users
 
-
-    def create(self, user: User) -> DBUser:
+    def create(self, user: UserCreate) -> DBUser:
         """
         Create a new user
 
@@ -81,7 +82,7 @@ class UserRepository:
 
             return db_user
 
-    def update(self, uid: int, user: User) -> Optional[DBUser]:
+    def update(self, uid: int, user: UserUpdate) -> Optional[DBUser]:
         """
         Update a user
 

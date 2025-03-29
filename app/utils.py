@@ -14,6 +14,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     This function verifies the password
@@ -24,6 +25,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     return pwd_context.verify(plain_password, hashed_password)
 
+
 def get_password_hash(password: str) -> str:
     """
     This function gets the password hash
@@ -33,11 +35,9 @@ def get_password_hash(password: str) -> str:
     """
     return pwd_context.hash(password)
 
+
 def create_access_token(
-    data: dict,
-    secret_key: str,
-    algorithm: str,
-    expires_delta: timedelta = None
+    data: dict, secret_key: str, algorithm: str, expires_delta: timedelta = None
 ) -> str:
     """
     This function creates an access token
@@ -54,6 +54,7 @@ def create_access_token(
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, secret_key, algorithm=algorithm)
 
+
 def get_user(_db, username: str) -> Optional[DBUser]:
     """
     This function gets the user
@@ -66,6 +67,7 @@ def get_user(_db, username: str) -> Optional[DBUser]:
         user_data = _db[username]
         return DBUser(**user_data)
     return None
+
 
 def authenticate_user(_db, username: str, password: str) -> Optional[DBUser]:
     """

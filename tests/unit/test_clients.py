@@ -1,6 +1,7 @@
 """
 This module tests the API routes for clients.
 """
+
 import pytest
 
 from fastapi.testclient import TestClient
@@ -30,14 +31,11 @@ def test_create_client(mock_db_session):
         "scope": ["read", "write"],
         "contacts": ["contact@example.com"],
         "tos_uri": "https://example.com/tos",
-        "policy_uri": "https://example.com/policy"
+        "policy_uri": "https://example.com/policy",
     }
 
     # Act
-    response = client.post(
-        url="/clients/",
-        json=new_client
-    )
+    response = client.post(url="/clients/", json=new_client)
 
     # Assert
     data = response.json()
@@ -58,4 +56,3 @@ def test_create_client(mock_db_session):
 
     mock_db_session.add.assert_called()
     mock_db_session.commit.assert_called()
-

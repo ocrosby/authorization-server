@@ -8,12 +8,14 @@ from sqlmodel import Session, select
 from sqlalchemy.engine import Engine
 
 from app.models.client import DBClient
-from app.schemas.client import Client
+from app.schemas.client import ClientCreate, ClientUpdate
+
 
 class ClientRepository:
     """
     This class contains the methods for the client repository
     """
+
     def __init__(self, engine: Engine):
         self.engine = engine
 
@@ -28,7 +30,6 @@ class ClientRepository:
             client = session.get(DBClient, uid)
             return client
 
-
     def get_all(self) -> Sequence[DBClient]:
         """
         Retrieve all clients
@@ -39,8 +40,7 @@ class ClientRepository:
             clients = session.exec(select(DBClient)).all()
             return clients
 
-
-    def create(self, client: Client) -> DBClient:
+    def create(self, client: ClientCreate) -> DBClient:
         """
         Create a new client
 
@@ -56,7 +56,7 @@ class ClientRepository:
 
             return db_client
 
-    def update(self, uid: int, client: Client) -> Optional[DBClient]:
+    def update(self, uid: int, client: ClientUpdate) -> Optional[DBClient]:
         """
         Update a client
 

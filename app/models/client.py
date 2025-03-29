@@ -1,9 +1,11 @@
 """
 This module contains the Client model
 """
+
 from typing import Optional, List
 from sqlalchemy import Column, ARRAY, String
 from sqlmodel import Field, SQLModel
+
 
 class DBClient(SQLModel, table=True):
     """
@@ -25,6 +27,7 @@ class DBClient(SQLModel, table=True):
     tos_uri: Optional[str] - the terms of service URI
     policy_uri: Optional[str] - the policy URI
     """
+
     __tablename__ = "clients"
 
     id: int = Field(default=None, primary_key=True)

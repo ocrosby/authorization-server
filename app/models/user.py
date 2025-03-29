@@ -1,6 +1,7 @@
 """
 This module contains the User model
 """
+
 from typing import Optional
 from sqlmodel import SQLModel, Field
 
@@ -9,7 +10,8 @@ class DBUser(SQLModel, table=True):
     """
     The database model for the User
     """
-    __tablename__ = 'users'
+
+    __tablename__ = "users"
 
     id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
     username: str = Field(index=True, unique=True, nullable=False)

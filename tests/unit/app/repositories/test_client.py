@@ -6,18 +6,9 @@ This module contains the unit tests for the ClientRepository class.
 
 import pytest
 from app.models.client import DBClient
-from app.repositories.client_repository import ClientRepository
+from app.repositories.client import ClientRepository
 from app.schemas.client import Client
 
-@pytest.fixture
-def mock_engine(mocker):
-    """
-    Fixture to mock the SQLAlchemy engine.
-
-    :param mocker: The pytest-mock mocker fixture.
-    :return: Mocked Engine.
-    """
-    return mocker.MagicMock()
 
 @pytest.fixture
 def mock_session(mocker):
@@ -27,12 +18,11 @@ def mock_session(mocker):
     :param mocker: The pytest-mock mocker fixture.
     :return: Mocked Session.
     """
-    return mocker.patch('app.repositories.client_repository.Session', autospec=True)
-
+    return mocker.patch("app.repositories.client_repository.Session", autospec=True)
 
 
 @pytest.fixture
-def client_repository(mock_session):
+def client_repository(mock_session, mock_engine):
     """
     Fixture to create a ClientRepository instance with a mocked engine.
 
@@ -51,14 +41,15 @@ def test_get_by_id(client_repository, mock_session):
     """
     # Arrange
     mock_session_instance = mock_session.return_value.__enter__.return_value
-    mock_session_instance.get.return_value = DBClient(id=1, client_name='testclient')
+    mock_session_instance.get.return_value = DBClient(id=1, client_name="testclient")
 
     # Act
     client = client_repository.get_by_id(1)
 
     # Assert
     assert client.id == 1
-    assert client.client_name == 'testclient'
+    assert client.client_name == "testclient"
+
 
 def test_get_all(client_repository, mock_session):
     """
@@ -69,14 +60,15 @@ def test_get_all(client_repository, mock_session):
     """
     # Arrange
     mock_session.return_value.__enter__.return_value.exec.return_value.all.return_value = [
-        DBClient(id=1, client_name='testclient')]
+        DBClient(id=1, client_name="testclient")
+    ]
 
     # Act
     clients = client_repository.get_all()
 
     # Assert
     assert len(clients) == 1
-    assert clients[0].client_name == 'testclient'
+    assert clients[0].client_name == "testclient"
 
 
 def test_create(client_repository, mock_session):
@@ -90,11 +82,11 @@ def test_create(client_repository, mock_session):
     client_data = Client(
         client_id="123abc",
         client_secret="FFFFEEEE",
-        client_name='testclient',
+        client_name="testclient",
         redirect_uris=["http://localhost/callback"],
         grant_types=["authorization_code"],
         response_types=["code"],
-        scope=["openid", "profile"]
+        scope=["openid", "profile"],
     )
     mock_session.return_value.__enter__.return_value.commit.return_value = None
     mock_session.return_value.__enter__.return_value.refresh.return_value = None
@@ -103,7 +95,7 @@ def test_create(client_repository, mock_session):
     created_client = client_repository.create(client_data)
 
     # Assert
-    assert created_client.client_name == 'testclient'
+    assert created_client.client_name == "testclient"
 
 
 def test_update(client_repository, mock_session):
@@ -117,13 +109,15 @@ def test_update(client_repository, mock_session):
     client_data = Client(
         client_id="123abc",
         client_secret="FFFFEEEE",
-        client_name='testclient',
+        client_name="testclient",
         redirect_uris=["http://localhost/callback"],
         grant_types=["authorization_code"],
         response_types=["code"],
-        scope=["openid", "profile"]
+        scope=["openid", "profile"],
     )
-    mock_session.return_value.__enter__.return_value.get.return_value = DBClient(id=1, client_name='testclient')
+    mock_session.return_value.__enter__.return_value.get.return_value = DBClient(
+        id=1, client_name="testclient"
+    )
     mock_session.return_value.__enter__.return_value.commit.return_value = None
     mock_session.return_value.__enter__.return_value.refresh.return_value = None
 
@@ -131,7 +125,8 @@ def test_update(client_repository, mock_session):
     updated_client = client_repository.update(1, client_data)
 
     # Assert
-    assert updated_client.client_name == 'testclient'
+    assert updated_client.client_name == "testclient"
+
 
 def test_update_no_client(client_repository, mock_session):
     """
@@ -145,11 +140,11 @@ def test_update_no_client(client_repository, mock_session):
     client_data = Client(
         client_id="123abc",
         client_secret="FFFFEEEE",
-        client_name='testclient',
+        client_name="testclient",
         redirect_uris=["http://localhost/callback"],
         grant_types=["authorization_code"],
         response_types=["code"],
-        scope=["openid", "profile"]
+        scope=["openid", "profile"],
     )
     mock_session.return_value.__enter__.return_value.get.return_value = None
     mock_session.return_value.__enter__.return_value.commit.return_value = None
@@ -159,9 +154,11 @@ def test_update_no_client(client_repository, mock_session):
     updated_client = client_repository.update(1, client_data)
 
     # Assert
-    assert updated_client is not None, 'Client should not be None'
-    assert updated_client.id == 1, 'Client id should be 1'
-    assert updated_client.client_name == 'testclient', 'Client client_name should be newclient'
+    assert updated_client is not None, "Client should not be None"
+    assert updated_client.id == 1, "Client id should be 1"
+    assert (
+        updated_client.client_name == "testclient"
+    ), "Client client_name should be newclient"
 
 
 def test_delete(client_repository, mock_session):
@@ -172,7 +169,9 @@ def test_delete(client_repository, mock_session):
     :param mock_session: The mocked Session fixture.
     """
     # Arrange
-    mock_session.return_value.__enter__.return_value.get.return_value = DBClient(id=1, client_name='testclient')
+    mock_session.return_value.__enter__.return_value.get.return_value = DBClient(
+        id=1, client_name="testclient"
+    )
     mock_session.return_value.__enter__.return_value.commit.return_value = None
 
     # Act
@@ -180,6 +179,7 @@ def test_delete(client_repository, mock_session):
 
     # Assert
     assert result is True
+
 
 def test_delete_no_client(client_repository, mock_session):
     """
@@ -198,4 +198,4 @@ def test_delete_no_client(client_repository, mock_session):
     result = client_repository.delete(1)
 
     # Assert
-    assert result is False, 'Result should be False'
+    assert result is False, "Result should be False"
