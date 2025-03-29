@@ -129,6 +129,7 @@ def get_user_service(
     """
     return UserService(user_repository)
 
+
 def verify_current_user(current_user: DBUser):
     """
     This function verifies the current user

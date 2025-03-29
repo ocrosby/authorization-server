@@ -9,7 +9,12 @@ from app.models.user import DBUser
 from app.models.client import DBClient
 from app.schemas.client import ClientCreate, ClientUpdate
 from app.services.client import ClientService
-from app.dependencies import get_current_active_user, verify_current_user, get_session, get_client_service
+from app.dependencies import (
+    get_current_active_user,
+    verify_current_user,
+    get_session,
+    get_client_service,
+)
 
 
 router = APIRouter()
