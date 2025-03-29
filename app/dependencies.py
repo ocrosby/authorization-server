@@ -129,24 +129,3 @@ def get_user_service(
     """
     return UserService(user_repository)
 
-
-def verify_current_user(current_user: DBUser):
-    """
-    This function verifies the current user
-
-    :param current_user:
-    :return:
-    """
-    if current_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    if current_user.disabled:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Inactive user",
-            headers={"WWW-Authenticate": "Bearer"},
-        )

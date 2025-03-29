@@ -11,7 +11,6 @@ from app.schemas.client import ClientCreate, ClientUpdate
 from app.services.client import ClientService
 from app.dependencies import (
     get_current_active_user,
-    verify_current_user,
     get_session,
     get_client_service,
 )
@@ -27,8 +26,6 @@ async def create_client(
     current_user: DBUser = Depends(get_current_active_user),
 ):
     """This function creates a new client"""
-    verify_current_user(current_user)
-
     db_client = DBClient(
         client_id=client.client_id,
         client_secret=client.client_secret,
@@ -66,8 +63,6 @@ async def update_client(
     current_user: DBUser = Depends(get_current_active_user),
 ):
     """This function updates a client"""
-    verify_current_user(current_user)
-
     return service.update(client_id, client)
 
 
@@ -78,6 +73,4 @@ async def delete_client(
     current_user: DBUser = Depends(get_current_active_user),
 ):
     """This function deletes a client"""
-    verify_current_user(current_user)
-
     return service.delete(client_id)
