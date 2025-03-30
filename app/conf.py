@@ -3,6 +3,7 @@ This module loads the application settings
 """
 
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()

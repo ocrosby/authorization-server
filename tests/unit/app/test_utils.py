@@ -2,15 +2,16 @@
 This module contains unit tests for the utility functions in app.utils.
 """
 
+from datetime import UTC, datetime, timedelta
+
 import pytest
-from datetime import datetime, timedelta, UTC
 
 from app.utils import (
-    verify_password,
-    get_password_hash,
-    create_access_token,
-    get_user,
     authenticate_user,
+    create_access_token,
+    get_password_hash,
+    get_user,
+    verify_password,
 )
 
 

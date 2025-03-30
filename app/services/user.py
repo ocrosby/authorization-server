@@ -4,9 +4,9 @@ This module contains the UserService class, which provides methods for user mana
 
 from typing import Sequence
 
+from app.models.user import DBUser
 from app.repositories.user import UserRepository
 from app.schemas.user import UserCreate, UserUpdate
-from app.models.user import DBUser
 
 
 class UserService:

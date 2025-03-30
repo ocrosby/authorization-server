@@ -5,6 +5,7 @@ This module contains the unit tests for the UserRepository class.
 # tests/unit/app/repositories/test_user.py
 
 import pytest
+
 from app.models.user import DBUser
 from app.repositories.user import UserRepository
 from app.schemas.user import User

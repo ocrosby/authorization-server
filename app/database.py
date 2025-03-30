@@ -2,8 +2,8 @@
 This module contains the database configuration
 """
 
-from sqlmodel import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlmodel import create_engine
 
 from app.conf import DATABASE_URL
 

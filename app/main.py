@@ -3,11 +3,10 @@ This is the main file for the FastAPI application
 """
 
 from dotenv import load_dotenv
-
 from fastapi import FastAPI
 
-from app.utils import get_password_hash
 from app.routes import auth, user
+from app.utils import get_password_hash
 
 load_dotenv()
 

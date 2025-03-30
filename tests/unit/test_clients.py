@@ -3,8 +3,8 @@ This module tests the API routes for clients.
 """
 
 import pytest
-
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)

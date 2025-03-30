@@ -4,23 +4,18 @@ This file contains the dependencies for the FastAPI application.
 
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
-from sqlmodel import Session
-from app.database import engine
+from sqlalchemy.engine import Engine
+from sqlmodel import Session, create_engine
+
+from app.conf import ALGORITHM, SECRET_KEY
+from app.database import db, engine
 from app.models.token import TokenData
 from app.models.user import DBUser
-from app.utils import get_user
-from app.database import db
-from app.utils import oauth2_scheme
-from app.conf import SECRET_KEY, ALGORITHM
-
-from sqlalchemy.engine import Engine
-from sqlmodel import create_engine
-
 from app.repositories.client import ClientRepository
 from app.repositories.user import UserRepository
-
 from app.services.client import ClientService
 from app.services.user import UserService
+from app.utils import get_user, oauth2_scheme
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):

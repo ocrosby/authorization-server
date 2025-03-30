@@ -1,16 +1,17 @@
 import pytest
 from fastapi import HTTPException, status
 from jose import JWTError
-from sqlmodel import Session, create_engine
 from sqlalchemy.engine import Engine
+from sqlmodel import Session, create_engine
+
 from app.dependencies import (
-    get_current_user,
-    get_current_active_user,
-    get_session,
-    get_engine,
     get_client_repository,
-    get_user_repository,
     get_client_service,
+    get_current_active_user,
+    get_current_user,
+    get_engine,
+    get_session,
+    get_user_repository,
     get_user_service,
 )
 from app.models.token import TokenData
@@ -19,7 +20,7 @@ from app.repositories.client import ClientRepository
 from app.repositories.user import UserRepository
 from app.services.client import ClientService
 from app.services.user import UserService
-from app.utils import oauth2_scheme, get_user
+from app.utils import get_user, oauth2_scheme
 
 
 @pytest.fixture

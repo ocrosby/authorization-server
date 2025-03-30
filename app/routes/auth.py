@@ -3,12 +3,14 @@ This module contains the routes for authentication
 """
 
 from datetime import timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+
+from app.conf import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
+from app.database import db
 from app.models.token import Token
 from app.utils import authenticate_user, create_access_token
-from app.database import db
-from app.conf import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
 
 router = APIRouter()
 

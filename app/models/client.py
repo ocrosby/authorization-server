@@ -2,8 +2,9 @@
 This module contains the Client model
 """
 
-from typing import Optional, List
-from sqlalchemy import Column, ARRAY, String
+from typing import List, Optional
+
+from sqlalchemy import ARRAY, Column, String
 from sqlmodel import Field, SQLModel
 
 

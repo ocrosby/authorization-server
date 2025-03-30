@@ -2,12 +2,13 @@
 This module contains utility functions for the application
 """
 
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 from typing import Optional
 
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
+
 from app.models.user import DBUser
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

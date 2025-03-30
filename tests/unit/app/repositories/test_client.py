@@ -5,6 +5,7 @@ This module contains the unit tests for the ClientRepository class.
 # tests/unit/app/repositories/test_client.py
 
 import pytest
+
 from app.models.client import DBClient
 from app.repositories.client import ClientRepository
 from app.schemas.client import Client
