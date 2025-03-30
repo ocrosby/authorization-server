@@ -18,7 +18,7 @@ def mock_session(mocker):
     :param mocker: The pytest-mock mocker fixture.
     :return: Mocked Session.
     """
-    return mocker.patch("app.repositories.user_repository.Session", autospec=True)
+    return mocker.patch("app.repositories.user.Session", autospec=True)
 
 
 @pytest.fixture
@@ -32,9 +32,9 @@ def user_repository(mock_session, mock_engine):
     return UserRepository(mock_engine)
 
 
-def test_get_by_id(user_repository, mock_session):
+def test_read(user_repository, mock_session):
     """
-    Test the get_by_id method of UserRepository.
+    Test the read method of UserRepository.
 
     :param user_repository: The UserRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -44,16 +44,16 @@ def test_get_by_id(user_repository, mock_session):
     mock_session_instance.get.return_value = DBUser(id=1, username="testuser")
 
     # Act
-    user = user_repository.get_by_id(1)
+    user = user_repository.read(1)
 
     # Assert
     assert user.id == 1
     assert user.username == "testuser"
 
 
-def test_get_by_username(user_repository, mock_session):
+def test_read_by_username(user_repository, mock_session):
     """
-    Test the get_by_username method of UserRepository.
+    Test the read_by_username method of UserRepository.
 
     :param user_repository: The UserRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -64,16 +64,16 @@ def test_get_by_username(user_repository, mock_session):
     )
 
     # Act
-    user = user_repository.get_by_username("testuser")
+    user = user_repository.read_by_username("testuser")
 
     # Assert
     assert user.id == 1
     assert user.username == "testuser"
 
 
-def test_get_by_email(user_repository, mock_session):
+def test_read_by_email(user_repository, mock_session):
     """
-    Test the get_by_email method of UserRepository.
+    Test the read_by_email method of UserRepository.
 
     :param user_repository: The UserRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -84,16 +84,16 @@ def test_get_by_email(user_repository, mock_session):
     )
 
     # Act
-    user = user_repository.get_by_email("test@example.com")
+    user = user_repository.read_by_email("test@example.com")
 
     # Assert
     assert user.id == 1
     assert user.email == "test@example.com"
 
 
-def test_get_all(user_repository, mock_session):
+def test_read_all(user_repository, mock_session):
     """
-    Test the get_all method of UserRepository.
+    Test the read_all method of UserRepository.
 
     :param user_repository: The UserRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -104,7 +104,7 @@ def test_get_all(user_repository, mock_session):
     ]
 
     # Act
-    users = user_repository.get_all()
+    users = user_repository.read_all()
 
     # Assert
     assert len(users) == 1

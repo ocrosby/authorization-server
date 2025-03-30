@@ -18,7 +18,7 @@ def mock_session(mocker):
     :param mocker: The pytest-mock mocker fixture.
     :return: Mocked Session.
     """
-    return mocker.patch("app.repositories.client_repository.Session", autospec=True)
+    return mocker.patch("app.repositories.client.Session", autospec=True)
 
 
 @pytest.fixture
@@ -32,9 +32,9 @@ def client_repository(mock_session, mock_engine):
     return ClientRepository(mock_engine)
 
 
-def test_get_by_id(client_repository, mock_session):
+def test_read(client_repository, mock_session):
     """
-    Test the get_by_id method of ClientRepository.
+    Test the read method of ClientRepository.
 
     :param client_repository: The ClientRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -44,16 +44,16 @@ def test_get_by_id(client_repository, mock_session):
     mock_session_instance.get.return_value = DBClient(id=1, client_name="testclient")
 
     # Act
-    client = client_repository.get_by_id(1)
+    client = client_repository.read(1)
 
     # Assert
     assert client.id == 1
     assert client.client_name == "testclient"
 
 
-def test_get_all(client_repository, mock_session):
+def test_read_all(client_repository, mock_session):
     """
-    Test the get_all method of ClientRepository.
+    Test the read_all method of ClientRepository.
 
     :param client_repository: The ClientRepository instance.
     :param mock_session: The mocked Session fixture.
@@ -64,7 +64,7 @@ def test_get_all(client_repository, mock_session):
     ]
 
     # Act
-    clients = client_repository.get_all()
+    clients = client_repository.read_all()
 
     # Assert
     assert len(clients) == 1

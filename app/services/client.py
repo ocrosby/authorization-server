@@ -32,7 +32,7 @@ class ClientService:
         :param client_id: The ID of the client to read.
         :return: The client with the specified ID.
         """
-        return self.client_repository.get_by_id(client_id)
+        return self.client_repository.read(client_id)
 
     def update(self, client_id: int, client_data: ClientUpdate) -> DBClient:
         """

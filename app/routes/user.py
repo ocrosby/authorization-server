@@ -4,7 +4,7 @@ This module contains routes for the User model
 
 from fastapi import APIRouter, Depends
 from app.models.user import DBUser
-from app.dependencies import get_current_active_user, verify_current_user
+from app.dependencies import get_current_active_user
 
 router = APIRouter()
 

@@ -128,4 +128,3 @@ def get_user_service(
     :return:
     """
     return UserService(user_repository)
-

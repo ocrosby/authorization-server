@@ -19,7 +19,7 @@ class UserRepository:
     def __init__(self, engine: Engine):
         self.engine = engine
 
-    def get_by_id(self, uid: int) -> Optional[DBUser]:
+    def read(self, uid: int) -> Optional[DBUser]:
         """
         Retrieve a user by id
 
@@ -30,7 +30,7 @@ class UserRepository:
             user = session.get(DBUser, uid)
             return user
 
-    def get_by_username(self, username: str) -> Optional[DBUser]:
+    def read_by_username(self, username: str) -> Optional[DBUser]:
         """
         Retrieve a user by username
 
@@ -43,7 +43,7 @@ class UserRepository:
             user = session.exec(statement).first()
             return user
 
-    def get_by_email(self, email: str) -> Optional[DBUser]:
+    def read_by_email(self, email: str) -> Optional[DBUser]:
         """
         Retrieve a user by email
 
@@ -56,7 +56,7 @@ class UserRepository:
             user = session.exec(statement).first()
             return user
 
-    def get_all(self) -> Sequence[DBUser]:
+    def read_all(self) -> Sequence[DBUser]:
         """
         Retrieve all users
 

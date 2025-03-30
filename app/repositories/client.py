@@ -19,7 +19,7 @@ class ClientRepository:
     def __init__(self, engine: Engine):
         self.engine = engine
 
-    def get_by_id(self, uid: int) -> Optional[DBClient]:
+    def read(self, uid: int) -> Optional[DBClient]:
         """
         Retrieve a client by id
 
@@ -30,7 +30,7 @@ class ClientRepository:
             client = session.get(DBClient, uid)
             return client
 
-    def get_all(self) -> Sequence[DBClient]:
+    def read_all(self) -> Sequence[DBClient]:
         """
         Retrieve all clients
 

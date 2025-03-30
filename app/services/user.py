@@ -2,6 +2,9 @@
 This module contains the UserService class, which provides methods for user management.
 """
 
+from typing import Sequence
+
+from app.repositories.user import UserRepository
 from app.schemas.user import UserCreate, UserUpdate
 from app.models.user import DBUser
 
@@ -11,8 +14,8 @@ class UserService:
     UserService class provides methods for user management.
     """
 
-    def __init__(self, user_repository):
-        self.user_repository = user_repository
+    def __init__(self, user_repository: UserRepository):
+        self.repo = user_repository
 
     def create(self, user_data: UserCreate) -> DBUser:
         """
@@ -21,7 +24,7 @@ class UserService:
         :param user_data:
         :return:
         """
-        return self.user_repository.create_user(user_data)
+        return self.repo.create(user_data)
 
     def read(self, user_id) -> DBUser:
         """
@@ -30,7 +33,33 @@ class UserService:
         :param user_id:
         :return:
         """
-        return self.user_repository.get_user(user_id)
+        return self.repo.read(user_id)
+
+    def read_by_username(self, username: str) -> DBUser:
+        """
+        Read a user by username.
+
+        :param username:
+        :return:
+        """
+        return self.repo.read_by_username(username)
+
+    def read_by_email(self, email: str) -> DBUser:
+        """
+        Read a user by email.
+
+        :param email:
+        :return:
+        """
+        return self.repo.read_by_email(email)
+
+    def read_all(self) -> Sequence[DBUser]:
+        """
+        Retrieve all users
+
+        :return: Sequence[DBUser]
+        """
+        return self.repo.read_all()
 
     def update(self, user_id: int, user_data: UserUpdate) -> DBUser:
         """
@@ -40,7 +69,7 @@ class UserService:
         :param user_data:
         :return:
         """
-        return self.user_repository.update_user(user_id, user_data)
+        return self.repo.update(user_id, user_data)
 
     def delete(self, user_id: int) -> bool:
         """
@@ -49,4 +78,4 @@ class UserService:
         :param user_id:
         :return:
         """
-        return self.user_repository.delete_user(user_id)
+        return self.repo.delete(user_id)
