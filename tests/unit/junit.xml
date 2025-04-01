@@ -1,45 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="29.899" timestamp="2025-03-30T14:29:06.457303-04:00" hostname="Omars-Mac-Studio.local"><testcase classname="tests.unit.app.test_dependencies" name="test_get_current_user_valid_token" time="23.599"><failure message="sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users&#10;[SQL: SELECT users.id, users.username, users.email, users.full_name, users.disabled, users.hashed_password &#10;FROM users &#10;WHERE users.username = ?]&#10;[parameters: ('testuser',)]&#10;(Background on this error at: https://sqlalche.me/e/20/e3q8)">../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1964: in _exec_single_context
-    self.dialect.do_execute(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:942: in do_execute
-    cursor.execute(statement, parameters)
-E   sqlite3.OperationalError: no such table: users
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="16.750" timestamp="2025-04-01T06:07:25.654403-04:00" hostname="Omars-Mac-Studio.local"><testcase classname="tests.unit.app.test_dependencies" name="test_get_current_user_valid_token" time="13.462"><failure message="AssertionError: expected call not found.&#10;Expected: decode('valid_token', 'SECRET_KEY', algorithms=['HS256'])&#10;  Actual: decode('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde', algorithms=['HS256'])&#10;&#10;pytest introspection follows:&#10;&#10;Args:&#10;assert ('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde') == ('valid_token', 'SECRET_KEY')&#10;  &#10;  At index 1 diff: 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde' != 'SECRET_KEY'&#10;  &#10;  Full diff:&#10;    (&#10;        'valid_token',&#10;  -     'SECRET_KEY',&#10;  +     'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde',&#10;    )">/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py:977: in assert_called_with
+    raise AssertionError(_error_message()) from cause
+E   AssertionError: expected call not found.
+E   Expected: decode('valid_token', 'SECRET_KEY', algorithms=['HS256'])
+E     Actual: decode('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde', algorithms=['HS256'])
 
-The above exception was the direct cause of the following exception:
-app/test_dependencies.py:58: in test_get_current_user_valid_token
-    user = await get_current_user(token="valid_token")
-../../app/dependencies.py:49: in get_current_user
-    user = service.read_by_username(username=token_data.username)
-../../app/services/user.py:45: in read_by_username
-    return self.repo.read_by_username(username)
-../../app/repositories/user.py:43: in read_by_username
-    user = session.exec(statement).first()
-../../.venv/lib/python3.13/site-packages/sqlmodel/orm/session.py:66: in exec
-    results = super().execute(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:2365: in execute
-    return self._execute_internal(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:2251: in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/orm/context.py:306: in orm_execute_statement
-    result = conn.execute(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1416: in execute
-    return meth(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:523: in _execute_on_connection
-    return connection._execute_clauseelement(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1638: in _execute_clauseelement
-    ret = self._execute_context(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1843: in _execute_context
-    return self._exec_single_context(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1983: in _exec_single_context
-    self._handle_dbapi_exception(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:2352: in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1964: in _exec_single_context
-    self.dialect.do_execute(
-../../.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:942: in do_execute
-    cursor.execute(statement, parameters)
-E   sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
-E   [SQL: SELECT users.id, users.username, users.email, users.full_name, users.disabled, users.hashed_password 
-E   FROM users 
-E   WHERE users.username = ?]
-E   [parameters: ('testuser',)]
-E   (Background on this error at: https://sqlalche.me/e/20/e3q8)</failure></testcase></testsuite></testsuites>
+During handling of the above exception, another exception occurred:
+/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py:989: in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+E   AssertionError: expected call not found.
+E   Expected: decode('valid_token', 'SECRET_KEY', algorithms=['HS256'])
+E     Actual: decode('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde', algorithms=['HS256'])
+E   
+E   pytest introspection follows:
+E   
+E   Args:
+E   assert ('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde') == ('valid_token', 'SECRET_KEY')
+E     
+E     At index 1 diff: 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde' != 'SECRET_KEY'
+E     
+E     Full diff:
+E       (
+E           'valid_token',
+E     -     'SECRET_KEY',
+E     +     'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde',
+E       )
+
+During handling of the above exception, another exception occurred:
+app/test_dependencies.py:73: in test_get_current_user_valid_token
+    mock_jwt.decode.assert_called_once_with(token, "SECRET_KEY", algorithms=["HS256"])
+E   AssertionError: expected call not found.
+E   Expected: decode('valid_token', 'SECRET_KEY', algorithms=['HS256'])
+E     Actual: decode('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde', algorithms=['HS256'])
+E   
+E   pytest introspection follows:
+E   
+E   Args:
+E   assert ('valid_token', 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde') == ('valid_token', 'SECRET_KEY')
+E     
+E     At index 1 diff: 'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde' != 'SECRET_KEY'
+E     
+E     Full diff:
+E       (
+E           'valid_token',
+E     -     'SECRET_KEY',
+E     +     'ba4732dca5a0eff15d31ae0026b291fcf481afee13a93594410c76f7b26bdcde',
+E       )</failure></testcase></testsuite></testsuites>

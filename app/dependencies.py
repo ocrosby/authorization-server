@@ -33,7 +33,16 @@ def get_engine() -> Engine:
     This function creates and returns a SQLAlchemy engine.
     :return: SQLAlchemy engine
     """
-    return create_engine("sqlite:///./test.db")  # Replace with your actual database URL
+    database_url = os.environ.get("DATABASE_URL")
+
+    if database_url:
+        return create_engine(database_url)
+    
+    # Fallback to a default SQLite database URL for testing or local development
+    # You can replace this with your actual database URL
+    # or configuration management system.
+    # For example, using SQLite for local development:
+    return create_engine("sqlite:///./test.db")
 
 
 def get_client_repository(engine_obj: Engine = Depends(get_engine)) -> ClientRepository:

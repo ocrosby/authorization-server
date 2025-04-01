@@ -63,7 +63,7 @@ async def test_get_current_user_valid_token(mock_jwt, mock_user_service, mocker)
     username = "testuser"
     mock_jwt.decode.return_value = {"sub": username}
     mock_user_service = mocker.Mock(UserService)
-    mock_user_service.read_by_username = AsyncMock(return_value=DBUser(id=1, username=username, hashed_password="hashed"))
+    mock_user_service.read_by_username.return_value = DBUser(id=1, username=username, hashed_password="hashed")
 
     # Act
     user = await get_current_user(token=token, service=mock_user_service)
