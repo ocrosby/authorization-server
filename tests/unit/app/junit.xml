@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.488" timestamp="2025-03-31T01:31:36.044429-04:00" hostname="Omars-Mac-Studio.local"><testcase classname="tests.unit.app.test_dependencies" name="test_get_current_user_valid_token" time="0.003"><failure message="AttributeError: 'coroutine' object has no attribute 'username'">test_dependencies.py:72: in test_get_current_user_valid_token
+    assert user.username == username
+E   AttributeError: 'coroutine' object has no attribute 'username'</failure></testcase></testsuite></testsuites>

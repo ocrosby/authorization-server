@@ -4,6 +4,8 @@ from jose import JWTError
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
+from unittest.mock import AsyncMock
+
 from app.dependencies import (
     get_client_repository,
     get_client_service,
@@ -27,6 +29,9 @@ from app.utils import get_user, oauth2_scheme
 def mock_jwt(mocker):
     return mocker.patch("app.dependencies.jwt")
 
+@pytest.fixture
+def mock_user_service(mocker):
+    return mocker.patch("app.services.user.UserService")
 
 @pytest.fixture
 def mock_db(mocker):
@@ -43,25 +48,32 @@ def mock_session(mocker):
     return mocker.patch("app.dependencies.Session")
 
 
-def test_get_current_user_valid_token(mock_jwt, mock_db):
+@pytest.fixture
+def mock_read_by_username(mocker):
+    return mocker.patch("app.repositories.user.UserRepository.read_by_username")
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_valid_token(mock_jwt, mock_user_service, mocker):
     """
     Test get_current_user with a valid token.
     """
     # Arrange
-    mock_jwt.decode.return_value = {"sub": "testuser"}
-    mock_db.get_user.return_value = DBUser(
-        id=1, username="testuser", hashed_password="hashed"
-    )
+    token = "valid_token"
+    username = "testuser"
+    mock_jwt.decode.return_value = {"sub": username}
+    mock_user_service = mocker.Mock(UserService)
+    mock_user_service.read_by_username = AsyncMock(return_value=DBUser(id=1, username=username, hashed_password="hashed"))
 
     # Act
-    user = get_current_user(token="valid_token")
+    user = await get_current_user(token=token, service=mock_user_service)
 
     # Assert
-    assert user.username == "testuser"
-    mock_jwt.decode.assert_called_once_with(
-        "valid_token", "SECRET_KEY", algorithms=["ALGORITHM"]
-    )
-    mock_db.get_user.assert_called_once_with(mock_db, username="testuser")
+    assert user.username == username
+    mock_jwt.decode.assert_called_once_with(token, "SECRET_KEY", algorithms=["HS256"])
+    mock_user_service.read_by_username.assert_called_once_with(username=username)
+
+
 
 
 def test_get_current_user_invalid_token(mock_jwt):

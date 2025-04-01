@@ -10,6 +10,7 @@ from jose import jwt
 from passlib.context import CryptContext
 
 from app.models.user import DBUser
+from app.services.user import UserService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -56,30 +57,27 @@ def create_access_token(
     return jwt.encode(to_encode, secret_key, algorithm=algorithm)
 
 
-def get_user(_db, username: str) -> Optional[DBUser]:
+def get_user(service: UserService, username: str) -> Optional[DBUser]:
     """
     This function gets the user
 
-    :param _db:
+    :param service:
     :param username:
     :return:
     """
-    if username in _db:
-        user_data = _db[username]
-        return DBUser(**user_data)
-    return None
+    return service.read_by_username(username=username)
 
 
-def authenticate_user(_db, username: str, password: str) -> Optional[DBUser]:
+def authenticate_user(service: UserService, username: str, password: str) -> Optional[DBUser]:
     """
     This function authenticates the user
 
-    :param _db:
+    :param service:
     :param username:
     :param password:
     :return:
     """
-    user = get_user(_db, username)
+    user = get_user(service, username)
     if not user or not verify_password(password, user.hashed_password):
         return None
     return user
