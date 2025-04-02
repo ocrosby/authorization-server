@@ -1,12 +1,11 @@
 """
 This is the main file for the FastAPI application
 """
-import os
+
 from contextlib import asynccontextmanager
 
 import toml
 import uvicorn
-
 from fastapi import FastAPI
 
 from app.database import init_db
@@ -27,29 +26,35 @@ def get_project_metadata():
         pyproject_data = toml.load(f)
 
     project_data = pyproject_data.get("project", {})
-    description = project_data.get("description", "No description available")
-    version = project_data.get("version", "0.0.0")
-    authors = project_data.get("authors", [{}])
-    author_name = authors[0].get("name", "Unknown author")
-    author_email = authors[0].get("email", "Unknown email")
+    project_description = project_data.get("description", "No description available")
+    project_version = project_data.get("version", "0.0.0")
+    project_authors = project_data.get("authors", [{}])
+    project_author_name = project_authors[0].get("name", "Unknown author")
+    project_author_email = project_authors[0].get("email", "Unknown email")
 
-    return description, version, author_name, author_email
+    return (
+        project_description,
+        project_version,
+        project_author_name,
+        project_author_email,
+    )
 
 
 description, version, author_name, author_email = get_project_metadata()
 
+
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(api_app: FastAPI):
     """
     Lifespan event handler for the FastAPI application.
     This function is called when the application starts up and shuts down.
     It can be used to perform setup and teardown tasks.
     For example, you can use it to initialize a database connection or load configuration files.
 
-    :param app: FastAPI
+    :param api_app: FastAPI
     :return:
     """
-    init_db()
+    init_db(api_app)
 
     print("Swagger UI: http://127.0.0.1:8000/docs")
     print("ReDoc: http://127.0.0.1:8000/redoc")
@@ -70,7 +75,7 @@ app = FastAPI(
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT",
     },
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Include routers

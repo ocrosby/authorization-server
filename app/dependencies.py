@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
-from app.conf import ALGORITHM, SECRET_KEY, DATABASE_URL, ECHO_SQL
+from app.conf import ALGORITHM, DATABASE_URL, ECHO_SQL, SECRET_KEY
 from app.models.token import TokenData
 from app.models.user import DBUser
 from app.repositories.client import ClientRepository
@@ -33,6 +33,7 @@ def get_engine() -> Engine:
 
     return create_engine(database_url, echo=echo_sql)
 
+
 def get_session():
     """
     This function gets the session
@@ -41,6 +42,7 @@ def get_session():
     """
     with Session(get_engine()) as session:
         yield session
+
 
 def get_client_repository(engine_obj: Engine = Depends(get_engine)) -> ClientRepository:
     """

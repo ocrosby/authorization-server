@@ -2,11 +2,12 @@
 This module contains the Client model
 """
 
+import json
 from typing import List, Optional
 
 from sqlalchemy import Column, Text
 from sqlmodel import Field, SQLModel
-import json
+
 
 class DBClient(SQLModel, table=True):
     """

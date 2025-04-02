@@ -176,6 +176,10 @@ cython_debug/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+.idea/misc.xml
+.idea/aws.xml
+.idea/authorization-server.iml
+
 # Editor-based Rest Client
 .idea/httpRequests
 
