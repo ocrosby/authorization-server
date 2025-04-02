@@ -2,11 +2,13 @@
 This is the main file for the FastAPI application
 """
 
+import os
 from contextlib import asynccontextmanager
 
 import toml
 import uvicorn
 from fastapi import FastAPI
+from utils import find_root_directory
 
 from app.database import init_db
 from app.routes import auth, user
@@ -22,7 +24,9 @@ def get_project_metadata():
         - author_name: Author's name
         - author_email: Author's email
     """
-    with open("pyproject.toml", "r", encoding="utf-8") as f:
+    root_directory = find_root_directory()
+    project_file = os.path.join(root_directory, "pyproject.toml")
+    with open(project_file, "r", encoding="utf-8") as f:
         pyproject_data = toml.load(f)
 
     project_data = pyproject_data.get("project", {})

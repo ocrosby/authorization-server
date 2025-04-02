@@ -2,6 +2,7 @@
 This module contains utility functions for the application
 """
 
+import os
 from datetime import UTC, datetime, timedelta
 from typing import Optional
 
@@ -15,6 +16,20 @@ from app.services.user import UserService
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+def find_root_directory() -> Optional[str]:
+    """
+    This function finds the root directory of the project
+
+    :return:
+    """
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    while current_dir != "/":
+        if os.path.exists(os.path.join(current_dir, "pyproject.toml")):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+    return None
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

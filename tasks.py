@@ -53,8 +53,8 @@ def run(c: Context):
 def format_code(c: Context):
     """Format the source files using black."""
     print("Formatting code with black and isort...")
-    c.run("black .")
-    c.run("isort .")
+    c.run("black app/ tests/ tasks.py update_version.py")
+    c.run("isort app/ tests/ tasks.py update_version.py")
     print("Code formatted successfully.")
 
 

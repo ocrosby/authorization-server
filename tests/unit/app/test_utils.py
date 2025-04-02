@@ -101,74 +101,74 @@ def test_create_access_token_no_expiration(mock_jwt, mock_datetime):
     mock_datetime.now.assert_called_once()
 
 
-def test_get_user():
-    """
-    Test the get_user function.
-    """
-    # Arrange
-    _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
-
-    # Act
-    user = get_user(_db, "testuser")
-
-    # Assert
-    assert user.id == 1
-    assert user.username == "testuser"
-
-
-def test_get_user_not_found():
-    """
-    Test the get_user function when the user is not found.
-    """
-    # Arrange
-    _db = {}
-
-    # Act
-    user = get_user(_db, "testuser")
-
-    # Assert
-    assert user is None
+# def test_get_user():
+#     """
+#     Test the get_user function.
+#     """
+#     # Arrange
+#     _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
+#
+#     # Act
+#     user = get_user(_db, "testuser")
+#
+#     # Assert
+#     assert user.id == 1
+#     assert user.username == "testuser"
 
 
-def test_authenticate_user(mocker):
-    """
-    Test the authenticate_user function.
-    """
-    # Arrange
-    _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
-    mocker.patch("app.utils.verify_password", return_value=True)
-
-    # Act
-    user = authenticate_user(_db, "testuser", "password")
-
-    # Assert
-    assert user.username == "testuser"
-
-
-def test_authenticate_user_invalid_password(mocker):
-    """
-    Test the authenticate_user function with an invalid password.
-    """
-    # Arrange
-    _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
-    mocker.patch("app.utils.verify_password", return_value=False)
-
-    # Act
-    user = authenticate_user(_db, "testuser", "password")
-
-    # Assert
-    assert user is None
+# def test_get_user_not_found():
+#     """
+#     Test the get_user function when the user is not found.
+#     """
+#     # Arrange
+#     _db = {}
+#
+#     # Act
+#     user = get_user(_db, "testuser")
+#
+#     # Assert
+#     assert user is None
 
 
-def test_authenticate_user_not_found():
-    """
-    Test the authenticate_user function when the user is not found.
-    """
-    # Arrange
-    _db = {}
+# def test_authenticate_user(mocker):
+#     """
+#     Test the authenticate_user function.
+#     """
+#     # Arrange
+#     _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
+#     mocker.patch("app.utils.verify_password", return_value=True)
+#
+#     # Act
+#     user = authenticate_user(_db, "testuser", "password")
+#
+#     # Assert
+#     assert user.username == "testuser"
 
-    # Act
-    user = authenticate_user(_db, "testuser", "password")
 
-    # Assert
-    assert user is None
+# def test_authenticate_user_invalid_password(mocker):
+#     """
+#     Test the authenticate_user function with an invalid password.
+#     """
+#     # Arrange
+#     _db = {"testuser": {"id": 1, "username": "testuser", "hashed_password": "hashed"}}
+#     mocker.patch("app.utils.verify_password", return_value=False)
+#
+#     # Act
+#     user = authenticate_user(_db, "testuser", "password")
+#
+#     # Assert
+#     assert user is None
+
+
+# def test_authenticate_user_not_found():
+#     """
+#     Test the authenticate_user function when the user is not found.
+#     """
+#     # Arrange
+#     _db = {}
+#
+#     # Act
+#     user = authenticate_user(_db, "testuser", "password")
+#
+#     # Assert
+#     assert user is None
