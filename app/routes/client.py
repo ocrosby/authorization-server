@@ -2,19 +2,18 @@
 This module contains routes for the Client model
 """
 
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.models.user import DBUser
-from app.models.client import DBClient
-from app.schemas.client import ClientCreate, ClientUpdate
-from app.services.client import ClientService
 from app.dependencies import (
+    get_client_service,
     get_current_active_user,
     get_session,
-    get_client_service,
 )
-
+from app.models.client import DBClient
+from app.models.user import DBUser
+from app.schemas.client import ClientCreate, ClientUpdate
+from app.services.client import ClientService
 
 router = APIRouter()
 

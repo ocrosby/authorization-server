@@ -3,6 +3,7 @@ This module contains the User schema
 """
 
 from typing import Optional
+
 from pydantic import BaseModel
 
 

@@ -3,6 +3,7 @@ This script hashes a given password from the command line
 """
 
 import click
+
 from app.utils import get_password_hash
 
 

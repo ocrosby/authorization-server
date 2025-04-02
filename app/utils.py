@@ -2,17 +2,34 @@
 This module contains utility functions for the application
 """
 
-from datetime import datetime, timedelta, UTC
+import os
+from datetime import UTC, datetime, timedelta
 from typing import Optional
 
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
+
 from app.models.user import DBUser
+from app.services.user import UserService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+def find_root_directory() -> Optional[str]:
+    """
+    This function finds the root directory of the project
+
+    :return:
+    """
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    while current_dir != "/":
+        if os.path.exists(os.path.join(current_dir, "pyproject.toml")):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+    return None
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -55,30 +72,29 @@ def create_access_token(
     return jwt.encode(to_encode, secret_key, algorithm=algorithm)
 
 
-def get_user(_db, username: str) -> Optional[DBUser]:
+def get_user(service: UserService, username: str) -> Optional[DBUser]:
     """
     This function gets the user
 
-    :param _db:
+    :param service:
     :param username:
     :return:
     """
-    if username in _db:
-        user_data = _db[username]
-        return DBUser(**user_data)
-    return None
+    return service.read_by_username(username=username)
 
 
-def authenticate_user(_db, username: str, password: str) -> Optional[DBUser]:
+def authenticate_user(
+    service: UserService, username: str, password: str
+) -> Optional[DBUser]:
     """
     This function authenticates the user
 
-    :param _db:
+    :param service:
     :param username:
     :param password:
     :return:
     """
-    user = get_user(_db, username)
+    user = get_user(service, username)
     if not user or not verify_password(password, user.hashed_password):
         return None
     return user

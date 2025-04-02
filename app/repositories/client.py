@@ -4,8 +4,8 @@ This module contains the client repository class
 
 from typing import Optional, Sequence
 
-from sqlmodel import Session, select
 from sqlalchemy.engine import Engine
+from sqlmodel import Session, select
 
 from app.models.client import DBClient
 from app.schemas.client import ClientCreate, ClientUpdate

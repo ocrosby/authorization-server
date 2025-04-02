@@ -4,8 +4,8 @@ This module contains the user repository class
 
 from typing import Optional, Sequence
 
-from sqlmodel import Session, select
 from sqlalchemy.engine import Engine
+from sqlmodel import Session, select
 
 from app.models.user import DBUser
 from app.schemas.user import UserCreate, UserUpdate

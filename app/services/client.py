@@ -2,9 +2,8 @@
 This module contains the ClientService class, which provides methods for client management.
 """
 
-from app.repositories.client import ClientRepository
-
 from app.models.client import DBClient
+from app.repositories.client import ClientRepository
 from app.schemas.client import ClientCreate, ClientUpdate
 
 

@@ -6,6 +6,8 @@ authors = [
     { name="Omar Crosby", email="omar.crosby@gmail.com" }
 ]
 dependencies = [
+    "bcrypt==4.0.1",
+    "email-validator",
     "fastapi",
     "httpx",
     "passlib[bcrypt]",
@@ -13,6 +15,7 @@ dependencies = [
     "python-multipart",
     "requests",
     "sqlmodel",
+    "toml",
     "uvicorn[standard]",
 ]
 
@@ -22,10 +25,16 @@ build-backend = "flit_core.buildapi"
 
 [project.optional-dependencies]
 dev = [
-    "black>=25.1.0",
-    "pytest>=6.2.5",
-    "pytest-mock>=3.14.0",
-    "requests-mock>=1.12.1"
+    "black",
+    "flake8",
+    "isort",
+    "mypy",
+    "pylint",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-mock",
+    "radon"
 ]
 
 [project.scripts]
