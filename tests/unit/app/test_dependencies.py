@@ -1,10 +1,10 @@
+from unittest.mock import AsyncMock
+
 import pytest
 from fastapi import HTTPException, status
 from jose import JWTError
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
-
-from unittest.mock import AsyncMock
 
 from app.dependencies import (
     get_client_repository,
@@ -29,9 +29,11 @@ from app.utils import get_user, oauth2_scheme
 def mock_jwt(mocker):
     return mocker.patch("app.dependencies.jwt")
 
+
 @pytest.fixture
 def mock_user_service(mocker):
     return mocker.patch("app.services.user.UserService")
+
 
 @pytest.fixture
 def mock_db(mocker):
@@ -63,7 +65,9 @@ async def test_get_current_user_valid_token(mock_jwt, mock_user_service, mocker)
     username = "testuser"
     mock_jwt.decode.return_value = {"sub": username}
     mock_user_service = mocker.Mock(UserService)
-    mock_user_service.read_by_username.return_value = DBUser(id=1, username=username, hashed_password="hashed")
+    mock_user_service.read_by_username.return_value = DBUser(
+        id=1, username=username, hashed_password="hashed"
+    )
 
     # Act
     user = await get_current_user(token=token, service=mock_user_service)
@@ -72,8 +76,6 @@ async def test_get_current_user_valid_token(mock_jwt, mock_user_service, mocker)
     assert user.username == username
     mock_jwt.decode.assert_called_once_with(token, "SECRET_KEY", algorithms=["HS256"])
     mock_user_service.read_by_username.assert_called_once_with(username=username)
-
-
 
 
 def test_get_current_user_invalid_token(mock_jwt):

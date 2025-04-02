@@ -6,6 +6,7 @@ authors = [
     { name="Omar Crosby", email="omar.crosby@gmail.com" }
 ]
 dependencies = [
+    "bcrypt==4.0.1",
     "fastapi",
     "httpx",
     "passlib[bcrypt]",
@@ -13,6 +14,7 @@ dependencies = [
     "python-multipart",
     "requests",
     "sqlmodel",
+    "toml",
     "uvicorn[standard]",
 ]
 

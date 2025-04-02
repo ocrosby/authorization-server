@@ -68,7 +68,9 @@ def get_user(service: UserService, username: str) -> Optional[DBUser]:
     return service.read_by_username(username=username)
 
 
-def authenticate_user(service: UserService, username: str, password: str) -> Optional[DBUser]:
+def authenticate_user(
+    service: UserService, username: str, password: str
+) -> Optional[DBUser]:
     """
     This function authenticates the user
 

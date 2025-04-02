@@ -7,16 +7,31 @@ from jose import JWTError, jwt
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
-from app.conf import ALGORITHM, SECRET_KEY
-from app.database import db, engine
+from app.conf import ALGORITHM, SECRET_KEY, DATABASE_URL, ECHO_SQL
 from app.models.token import TokenData
 from app.models.user import DBUser
 from app.repositories.client import ClientRepository
 from app.repositories.user import UserRepository
 from app.services.client import ClientService
 from app.services.user import UserService
-from app.utils import get_user, oauth2_scheme
+from app.utils import oauth2_scheme
 
+
+def get_engine() -> Engine:
+    """
+    This function creates a SQLAlchemy engine using the database URL from the environment variable.
+    The engine is used to connect to the database and execute SQL queries.
+    The echo parameter is set to True to log all SQL queries to the console.
+    This is useful for debugging purposes.
+    :return: SQLAlchemy engine
+    """
+    database_url = DATABASE_URL
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is not set")
+
+    echo_sql = ECHO_SQL
+
+    return create_engine(database_url, echo=echo_sql)
 
 def get_session():
     """
@@ -24,26 +39,8 @@ def get_session():
 
     :return:
     """
-    with Session(engine) as session:
+    with Session(get_engine()) as session:
         yield session
-
-
-def get_engine() -> Engine:
-    """
-    This function creates and returns a SQLAlchemy engine.
-    :return: SQLAlchemy engine
-    """
-    database_url = os.environ.get("DATABASE_URL")
-
-    if database_url:
-        return create_engine(database_url)
-    
-    # Fallback to a default SQLite database URL for testing or local development
-    # You can replace this with your actual database URL
-    # or configuration management system.
-    # For example, using SQLite for local development:
-    return create_engine("sqlite:///./test.db")
-
 
 def get_client_repository(engine_obj: Engine = Depends(get_engine)) -> ClientRepository:
     """
@@ -89,7 +86,10 @@ def get_user_service(
     return UserService(user_repository)
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), service: UserService = Depends(get_user_service)):
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    service: UserService = Depends(get_user_service),
+):
     """
     This function gets the current user
 
@@ -121,6 +121,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), service: UserSer
         raise credential_exception
 
     return user
+
 
 async def get_current_active_user(current_user: DBUser = Depends(get_current_user)):
     """

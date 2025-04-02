@@ -55,3 +55,8 @@ This project is an OAuth2 authorization server built with FastAPI. It includes f
 Run the tests using pytest:
 ```sh
 pytest
+```
+
+## References
+
+- [OAuth 2.0](https://oauth.net/2/)
