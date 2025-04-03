@@ -15,6 +15,14 @@ def clean(c: Context):
     c.run("find app -type d -name '__pycache__' -exec rm -rf {} +")
     c.run("find app -type f -name '*.pyc' -delete")
 
+    c.run("find tests -type d -name htmlcov -exec rm -rf {} +")
+    c.run("find tests -type f -name coverage.xml -delete")
+    c.run("find tests -type f -name junit.xml -delete")
+    c.run("find tests -type f -name .coverage -delete")
+
+    c.run("rm -f coverage.xml junit.xml .coverage")
+    c.run("rm -rf htmlcov")
+
 
 @task(
     pre=[clean],
