@@ -7,16 +7,18 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class User(BaseModel):
+class UserDisplay(BaseModel):
     """
-    This is the User model
+    This is the User model for display
     """
 
-    username: Optional[str] = None
-    email: Optional[str] = None
-    full_name: Optional[str] = None
+    id: Optional[int] = None
+    username: str
+    email: str
     disabled: Optional[bool] = False
-    hashed_password: Optional[str] = None
+
+    class Config:
+        orm_mode = True
 
 
 class UserCreate(BaseModel):
@@ -26,9 +28,8 @@ class UserCreate(BaseModel):
 
     username: str
     email: str
-    full_name: Optional[str] = None
-    disabled: Optional[bool] = False
     password: str
+    disabled: Optional[bool] = False
 
 
 class UserUpdate(BaseModel):
@@ -38,9 +39,8 @@ class UserUpdate(BaseModel):
 
     username: Optional[str] = None
     email: Optional[str] = None
-    full_name: Optional[str] = None
+    password: Optional[str] = None
     disabled: Optional[bool] = False
-    hashed_password: Optional[str] = None
 
 
 class UserLogin(BaseModel):

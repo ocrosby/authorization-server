@@ -18,7 +18,16 @@ from app.services.client import ClientService
 router = APIRouter()
 
 
-@router.post("/", response_model=DBClient)
+@router.get("", response_model=list[DBClient])
+async def read_clients(
+    current_user: DBUser = Depends(get_current_active_user),
+    service: ClientService = Depends(get_client_service),
+):
+    """This function reads all clients"""
+    return service.read_all()
+
+
+@router.post("", response_model=DBClient)
 async def create_client(
     client: ClientCreate,
     db: Session = Depends(get_session),

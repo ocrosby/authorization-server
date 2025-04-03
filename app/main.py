@@ -8,10 +8,12 @@ from contextlib import asynccontextmanager
 import toml
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from utils import find_root_directory
 
+from app.conf import DATABASE_URL
 from app.database import init_db
-from app.routes import auth, user
+from app.routes import auth, clients, probes, users
 
 
 def get_project_metadata():
@@ -58,14 +60,40 @@ async def lifespan(api_app: FastAPI):
     :param api_app: FastAPI
     :return:
     """
-    init_db(api_app)
-
+    print("Starting up the application...")
+    print(f"Database URL: {DATABASE_URL}")
     print("Swagger UI: http://127.0.0.1:8000/docs")
     print("ReDoc: http://127.0.0.1:8000/redoc")
 
     yield
     # Add any cleanup code here if needed
 
+
+tags_metadata = [
+    {
+        "name": "auth",
+        "description": "Authentication routes",
+    },
+    {
+        "name": "users",
+        "description": "User management routes",
+    },
+    {
+        "name": "probes",
+        "description": "Health check routes",
+    },
+    {
+        "name": "clients",
+        "description": "Client management routes",
+    },
+]
+
+# Define the allowed origins
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://yourdomain.com",
+]
 
 app = FastAPI(
     title="Authorization Server",
@@ -80,11 +108,26 @@ app = FastAPI(
         "url": "https://opensource.org/licenses/MIT",
     },
     lifespan=lifespan,
+    openapi_tags=tags_metadata,
 )
 
+# Add CORS middleware to the application
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize the database
+init_db(app)
+
 # Include routers
-app.include_router(auth.router)
-app.include_router(user.router)
+app.include_router(auth.router, tags=["auth"])
+app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(probes.router, prefix="/health", tags=["probes"])
+app.include_router(clients.router, prefix="/clients", tags=["clients"])
 
 
 def main():

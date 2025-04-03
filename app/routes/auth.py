@@ -7,11 +7,13 @@ from datetime import timedelta
 from dependencies import get_user_service
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from models.user import DBUser
+from schemas.user import UserCreate
 from services.user import UserService
 
 from app.conf import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 from app.models.token import Token
-from app.utils import authenticate_user, create_access_token
+from app.utils import authenticate_user, create_access_token, register_user
 
 router = APIRouter()
 
@@ -40,3 +42,20 @@ async def login_for_access_token(
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/register", response_model=DBUser)
+async def create_user(
+    user: UserCreate,
+    service: UserService = Depends(get_user_service),
+):
+    """This function registers a new user"""
+    new_user = register_user(service, user.username, user.password, user.email)
+
+    if not new_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already registered",
+        )
+
+    return new_user

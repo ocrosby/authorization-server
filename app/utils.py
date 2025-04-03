@@ -98,3 +98,25 @@ def authenticate_user(
     if not user or not verify_password(password, user.hashed_password):
         return None
     return user
+
+
+def register_user(
+    service: UserService, username: str, password: str, email: str
+) -> Optional[DBUser]:
+    """
+    This function registers the user
+
+    :param service:
+    :param username:
+    :param password:
+    :param email:
+    :return:
+    """
+    if service.read_by_username(username=username):
+        return None
+    if service.read_by_email(email=email):
+        return None
+    hashed_password = get_password_hash(password)
+    user = DBUser(username=username, hashed_password=hashed_password, email=email)
+    service.create(user)
+    return user

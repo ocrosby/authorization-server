@@ -14,4 +14,4 @@ Base = declarative_base()
 
 
 def init_db(api_app: FastAPI):
-    SQLModel.metadata.create_all(get_engine())
+    SQLModel.metadata.create_all(get_engine(), checkfirst=True)

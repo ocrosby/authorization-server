@@ -2,6 +2,8 @@
 This module contains the ClientService class, which provides methods for client management.
 """
 
+from typing import Sequence
+
 from app.models.client import DBClient
 from app.repositories.client import ClientRepository
 from app.schemas.client import ClientCreate, ClientUpdate
@@ -32,6 +34,14 @@ class ClientService:
         :return: The client with the specified ID.
         """
         return self.client_repository.read(client_id)
+
+    def read_all(self) -> Sequence[DBClient]:
+        """
+        Retrieve all clients.
+
+        :return: A list of all clients.
+        """
+        return self.client_repository.read_all()
 
     def update(self, client_id: int, client_data: ClientUpdate) -> DBClient:
         """

@@ -191,3 +191,5 @@ cython_debug/
 
 # Node.js dependencies
 node_modules/
+
+*.db

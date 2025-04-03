@@ -13,10 +13,10 @@ class DBUser(SQLModel, table=True):
     """
 
     __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
 
-    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
-    username: str = Field(index=True, unique=True, nullable=False)
-    email: Optional[str] = Field(index=True, unique=True, nullable=False)
-    full_name: Optional[str] = Field(default=None)
-    disabled: Optional[bool] = Field(default=False, nullable=False)
-    hashed_password: str = Field(nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str
+    email: str
+    disabled: Optional[bool] = False
+    hashed_password: Optional[str] = None
