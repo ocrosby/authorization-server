@@ -1,5 +1,8 @@
 # Authorization Server
 
+[![Continuous Integration](https://github.com/ocrosby/authorization-server/actions/workflows/ci.yaml/badge.svg)](https://github.com/ocrosby/authorization-server/actions/workflows/ci.yaml)
+[![Release](https://github.com/ocrosby/authorization-server/actions/workflows/release.yaml/badge.svg)](https://github.com/ocrosby/authorization-server/actions/workflows/release.yaml)
+
 A simple OAuth2 authorization server.
 
 ## Project Description
