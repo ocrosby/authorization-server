@@ -2,6 +2,8 @@
 This file contains the dependencies for the FastAPI application.
 """
 
+from typing import Generator
+
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.engine import Engine
@@ -34,7 +36,7 @@ def get_engine() -> Engine:
     return create_engine(database_url, echo=echo_sql)
 
 
-def get_session():
+def get_session() -> Generator[Session, None, None]:
     """
     This function gets the session
 
@@ -91,7 +93,7 @@ def get_user_service(
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
     service: UserService = Depends(get_user_service),
-):
+) -> DBUser:
     """
     This function gets the current user
 
@@ -125,7 +127,9 @@ async def get_current_user(
     return user
 
 
-async def get_current_active_user(current_user: DBUser = Depends(get_current_user)):
+async def get_current_active_user(
+    current_user: DBUser = Depends(get_current_user),
+) -> DBUser:
     """
     This function gets the current active user
 

@@ -3,6 +3,7 @@ This module contains the routes for authentication
 """
 
 from datetime import timedelta
+from typing import Optional
 
 from dependencies import get_user_service
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -22,7 +23,7 @@ router = APIRouter()
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     service: UserService = Depends(get_user_service),
-):
+) -> Token:
     """This function logs in for access token"""
     user = authenticate_user(service, form_data.username, form_data.password)
     if not user:
@@ -34,23 +35,28 @@ async def login_for_access_token(
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
+    secret_key = SECRET_KEY or ""
+    algorithm = ALGORITHM or ""
+
     access_token = create_access_token(
         data={"sub": user.username},
-        secret_key=SECRET_KEY,
-        algorithm=ALGORITHM,
+        secret_key=secret_key,
+        algorithm=algorithm,
         expires_delta=access_token_expires,
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @router.post("/register", response_model=DBUser)
 async def create_user(
     user: UserCreate,
     service: UserService = Depends(get_user_service),
-):
+) -> Optional[DBUser]:
     """This function registers a new user"""
-    new_user = register_user(service, user.username, user.password, user.email)
+    new_user: Optional[DBUser] = register_user(
+        service, user.username, user.password, user.email
+    )
 
     if not new_user:
         raise HTTPException(

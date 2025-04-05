@@ -4,11 +4,12 @@ This module contains utility functions for the application
 
 import os
 from datetime import UTC, datetime, timedelta
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
+from schemas.user import UserCreate
 
 from app.models.user import DBUser
 from app.services.user import UserService
@@ -40,21 +41,15 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     :param hashed_password:
     :return:
     """
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password: str) -> str:
-    """
-    This function gets the password hash
-
-    :param password:
-    :return:
-    """
-    return pwd_context.hash(password)
+    answer: bool = pwd_context.verify(plain_password, hashed_password)
+    return answer
 
 
 def create_access_token(
-    data: dict, secret_key: str, algorithm: str, expires_delta: timedelta = None
+    data: Dict[str, Any],
+    secret_key: str,
+    algorithm: str,
+    expires_delta: Optional[timedelta] = None,
 ) -> str:
     """
     This function creates an access token
@@ -69,7 +64,8 @@ def create_access_token(
     now = datetime.now(UTC)
     expire = now + expires_delta if expires_delta else now + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, secret_key, algorithm=algorithm)
+    access_token: str = jwt.encode(to_encode, secret_key, algorithm=algorithm)
+    return access_token
 
 
 def get_user(service: UserService, username: str) -> Optional[DBUser]:
@@ -95,7 +91,11 @@ def authenticate_user(
     :return:
     """
     user = get_user(service, username)
-    if not user or not verify_password(password, user.hashed_password):
+    if (
+        not user
+        or not user.hashed_password
+        or not verify_password(password, user.hashed_password)
+    ):
         return None
     return user
 
@@ -106,17 +106,24 @@ def register_user(
     """
     This function registers the user
 
-    :param service:
-    :param username:
-    :param password:
-    :param email:
-    :return:
+    :param service: The user service
+    :type service: UserService
+    :param username: The user username
+    :type username: str
+    :param password: The user password
+    :type password: str
+    :param email: The user email
+    :type email: str
+    :return: The user
+    :rtype: Optional[DBUser]
     """
     if service.read_by_username(username=username):
         return None
+
     if service.read_by_email(email=email):
         return None
-    hashed_password = get_password_hash(password)
-    user = DBUser(username=username, hashed_password=hashed_password, email=email)
-    service.create(user)
-    return user
+
+    user_create = UserCreate(username=username, password=password, email=email)
+    db_user = service.create(user_create)
+
+    return db_user

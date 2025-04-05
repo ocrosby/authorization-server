@@ -4,6 +4,7 @@ This is the main file for the FastAPI application
 
 import os
 from contextlib import asynccontextmanager
+from typing import Any, AsyncGenerator, Tuple
 
 import toml
 import uvicorn
@@ -16,7 +17,7 @@ from app.database import init_db
 from app.routes import auth, clients, probes, users
 
 
-def get_project_metadata():
+def get_project_metadata() -> Tuple[str, str, str, str]:
     """
     Reads the pyproject.toml file to extract project metadata.
 
@@ -50,7 +51,7 @@ description, version, author_name, author_email = get_project_metadata()
 
 
 @asynccontextmanager
-async def lifespan(api_app: FastAPI):
+async def lifespan(api_app: FastAPI) -> AsyncGenerator[None, Any]:  # noqa: D103
     """
     Lifespan event handler for the FastAPI application.
     This function is called when the application starts up and shuts down.
@@ -58,7 +59,6 @@ async def lifespan(api_app: FastAPI):
     For example, you can use it to initialize a database connection or load configuration files.
 
     :param api_app: FastAPI
-    :return:
     """
     print("Starting up the application...")
     print(f"Database URL: {DATABASE_URL}")
@@ -130,7 +130,11 @@ app.include_router(probes.router, prefix="/health", tags=["probes"])
 app.include_router(clients.router, prefix="/clients", tags=["clients"])
 
 
-def main():
+def main() -> None:
+    """
+    Main function to run the FastAPI application.
+    :return:
+    """
     uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
 
 

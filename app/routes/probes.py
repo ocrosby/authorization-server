@@ -5,15 +5,15 @@ router = APIRouter()
 
 
 @router.get("/liveness", response_model=StatusResponse)
-async def health_check():
+async def health_check() -> StatusResponse:
     return StatusResponse(status="ok")
 
 
 @router.get("/startup", response_model=StatusResponse)
-async def health_startup():
+async def health_startup() -> StatusResponse:
     return StatusResponse(status="healthy")
 
 
 @router.get("/ready", response_model=StatusResponse)
-async def health_ready():
+async def health_ready() -> StatusResponse:
     return StatusResponse(status="ready")

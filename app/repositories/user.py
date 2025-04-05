@@ -9,6 +9,7 @@ from sqlmodel import Session, select
 
 from app.models.user import DBUser
 from app.schemas.user import UserCreate, UserUpdate
+from app.security import get_password_hash
 
 
 class UserRepository:
@@ -66,43 +67,51 @@ class UserRepository:
             users = session.exec(select(DBUser)).all()
             return users
 
-    def create(self, user: UserCreate) -> DBUser:
+    def create(self, user_create: UserCreate) -> DBUser:
         """
         Create a new user
 
-        :param user: the user data
+        :param user_create: the user data
         :return: the created user
         :rtype: DBUser
         """
-        db_user = DBUser(**user.model_dump())
         with Session(self.engine) as session:
+            db_user = DBUser(**user_create.model_dump())
             session.add(db_user)
             session.commit()
             session.refresh(db_user)
 
             return db_user
 
-    def update(self, uid: int, user: UserUpdate) -> Optional[DBUser]:
+    def update(self, uid: int, user_update: UserUpdate) -> Optional[DBUser]:
         """
         Update a user
 
         :param uid: the user id
-        :param user: the user data
+        :param user_update: the user data
         :return: the updated user
         :rtype: Optional[DBUser]
         """
-        user_dict = user.model_dump()
+        user_dict = user_update.model_dump()
 
         with Session(self.engine) as session:
             db_user = session.get(DBUser, uid)
 
             if not db_user:
+                user_dict["hashed_password"] = get_password_hash(
+                    user_dict.pop("password")
+                )
                 db_user = DBUser(id=uid, **user_dict)
                 session.add(db_user)
             else:
                 for key, value in user_dict.items():
                     if value is not None:
-                        setattr(db_user, key, value)
+                        if hasattr(db_user, key):
+                            setattr(db_user, key, value)
+                        else:
+                            # Handle fields that are not part of DBUser, e.g., password
+                            if key == "password":
+                                db_user.hashed_password = get_password_hash(value)
 
                 session.add(db_user)
 

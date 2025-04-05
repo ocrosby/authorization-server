@@ -66,7 +66,7 @@ def format_code(c: Context):
     print("Code formatted successfully.")
 
 
-@task(aliases=["l"])
+@task(aliases=["l"], pre=[format_code])
 def lint(c: Context):
     """Lint the source files using flake8."""
     print("Linting source files...")
@@ -74,6 +74,8 @@ def lint(c: Context):
     c.run("pylint app/")
     print("Running flake8...")
     c.run("flake8 app/")
+    print("Running mypy...")
+    c.run("mypy app/")
     print("Linting completed.")
 
 

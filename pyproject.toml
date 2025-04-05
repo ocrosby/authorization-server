@@ -16,6 +16,7 @@ dependencies = [
     "requests",
     "sqlmodel",
     "toml",
+    "types-toml",
     "uvicorn[standard]",
 ]
 

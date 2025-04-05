@@ -2,6 +2,8 @@
 This is the Token model
 """
 
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -19,4 +21,4 @@ class TokenData(BaseModel):
     This is the TokenData model
     """
 
-    username: str or None = None
+    username: Optional[str] = None

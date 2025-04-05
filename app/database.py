@@ -13,5 +13,5 @@ HPW = "$2b$12$MsIdruNFD1BNSED.xG7K1OZTMyg7jNqqGE1T6BxDQwkIv3KhkSGLO"
 Base = declarative_base()
 
 
-def init_db(api_app: FastAPI):
+def init_db(api_app: FastAPI) -> None:  # noqa: C901
     SQLModel.metadata.create_all(get_engine(), checkfirst=True)

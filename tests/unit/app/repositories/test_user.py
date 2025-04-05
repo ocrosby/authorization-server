@@ -5,10 +5,14 @@ This module contains the unit tests for the UserRepository class.
 # tests/unit/app/repositories/test_user.py
 
 import pytest
+from schemas.user import UserCreate, UserUpdate
+from utils import verify_password
 
 from app.models.user import DBUser
 from app.repositories.user import UserRepository
-from app.schemas.user import User
+from app.security import get_password_hash
+
+# from app.schemas.user import User
 
 
 @pytest.fixture
@@ -23,11 +27,11 @@ def mock_session(mocker):
 
 
 @pytest.fixture
-def user_repository(mock_session, mock_engine):
+def user_repository(mock_engine):
     """
     Fixture to create a UserRepository instance with a mocked engine.
 
-    :param mock_session: The mocked Session fixture.
+    :param mock_engine: The mocked engine fixture.
     :return: UserRepository instance.
     """
     return UserRepository(mock_engine)
@@ -120,14 +124,14 @@ def test_create(user_repository, mock_session):
     :param mock_session: The mocked Session fixture.
     """
     # Arrange
-    user_data = User(
-        username="testuser", email="test@example.com", hashed_password="hashed"
+    user_create = UserCreate(
+        username="testuser", email="test@example.com", password="testpassword"
     )
     mock_session.return_value.__enter__.return_value.commit.return_value = None
     mock_session.return_value.__enter__.return_value.refresh.return_value = None
 
     # Act
-    created_user = user_repository.create(user_data)
+    created_user = user_repository.create(user_create)
 
     # Assert
     assert created_user.username == "testuser"
@@ -142,8 +146,8 @@ def test_update(user_repository, mock_session):
     :param mock_session: The mocked Session fixture.
     """
     # Arrange
-    user_data = User(
-        username="updateduser", email="updated@example.com", hashed_password="hashed"
+    user_update = UserUpdate(
+        username="updateduser", email="updated@example.com", password="hashed"
     )
     mock_session.return_value.__enter__.return_value.get.return_value = DBUser(
         id=1, username="testuser"
@@ -152,7 +156,7 @@ def test_update(user_repository, mock_session):
     mock_session.return_value.__enter__.return_value.refresh.return_value = None
 
     # Act
-    updated_user = user_repository.update(1, user_data)
+    updated_user = user_repository.update(1, user_update)
 
     # Assert
     assert updated_user.username == "updateduser"
@@ -168,15 +172,16 @@ def test_update_no_user(user_repository, mock_session):
     :return:
     """
     # Arrange
-    user_data = User(
-        username="newuser", email="newuser@example.com", hashed_password="hashed"
+    user_update = UserUpdate(
+        username="newuser", email="newuser@example.com", password="hashed"
     )
+    expected_password_hash = get_password_hash(user_update.password)
     mock_session.return_value.__enter__.return_value.get.return_value = None
     mock_session.return_value.__enter__.return_value.commit.return_value = None
     mock_session.return_value.__enter__.return_value.refresh.return_value = None
 
     # Act
-    updated_user = user_repository.update(1, user_data)
+    updated_user = user_repository.update(1, user_update)
 
     # Assert
     assert updated_user is not None, "User should not be None"
@@ -185,9 +190,9 @@ def test_update_no_user(user_repository, mock_session):
     assert (
         updated_user.email == "newuser@example.com"
     ), "User email should be newuser@example.com"
-    assert (
-        updated_user.hashed_password == "hashed"
-    ), "User hashed_password should be hashed"
+    assert verify_password(
+        user_update.password, updated_user.hashed_password
+    ), "Password should match"
 
 
 def test_delete(user_repository, mock_session):

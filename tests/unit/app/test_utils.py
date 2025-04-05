@@ -9,7 +9,6 @@ import pytest
 from app.utils import (
     authenticate_user,
     create_access_token,
-    get_password_hash,
     get_user,
     verify_password,
 )
@@ -43,21 +42,6 @@ def test_verify_password(mock_pwd_context):
     # Assert
     assert result is True
     mock_pwd_context.verify.assert_called_once_with("plain_password", "hashed_password")
-
-
-def test_get_password_hash(mock_pwd_context):
-    """
-    Test the get_password_hash function.
-    """
-    # Arrange
-    mock_pwd_context.hash.return_value = "hashed_password"
-
-    # Act
-    result = get_password_hash("plain_password")
-
-    # Assert
-    assert result == "hashed_password"
-    mock_pwd_context.hash.assert_called_once_with("plain_password")
 
 
 def test_create_access_token(mock_jwt, mock_datetime):
