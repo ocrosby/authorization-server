@@ -34,6 +34,7 @@ dev = [
     "pytest",
     "pytest-asyncio",
     "pytest-cov",
+    "py-cyclo",
     "pytest-mock",
     "radon"
 ]
